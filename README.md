@@ -4,22 +4,29 @@ The following two examples, when executed together, demonstrate the use of LE Lo
 
 1. **LE Long Range Peripheral application (GATT Server):** This application documented and demonstrated here is an implementation of Bluetooth&reg; LE custom service with security. During initialization, the app registers with the LE stack to receive notifications, including bonding complete, connection status change, and peer write. When a device is successfully bonded, the application saves the peer's Bluetooth&reg; device address to its NVRAM. Bonded devices can also write into the client configuration descriptor of the notification characteristic. That is also saved in the device's NVRAM.  When the user pushes the button, a notification/indication is sent to the bonded and registered host.
 
-2. **LE Long Range Central application (GATT Client):** This complementary application implements the peer role as the central GATT client. Use ModusToolbox software to create the project, or view the application README and download manually from: https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-central
+2. **LE Long Range Central application (GATT Client):** This complementary application implements the peer role as the central GATT client. Use ModusToolbox&trade; software to create the project, or view the application README and download manually from: https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-central
+
+Bluetooth&reg; LE Long Range (LR) feature is designed to provide extended range and improved robustness for LE devices. LR achieves this by using a new modulation scheme called Coded PHY, which uses Forward Error Correction (FEC) to improve the signal-to-noise ratio and increase the range of LE devices.
+
+The Coded PHY scheme has two different coding schemes: **S2** and **S8**.
+- **S2** provides a higher data rate than **S8**, and designed for applications that require a moderate range and data rate.
+- **S8** provides the longest range and highest robustness, but has a lower data rate than **S2**. It is designed for applications that require the longest possible range and the highest robustness, even at the cost of a lower data rate.
+
+**Note:** Both code examples are set to **S8** by default in order to showcase the longest range achievable with the Long Range feature. By setting the value of **USE_S8_DEFAULT** to **0** in the Makefile, the default coding scheme will be switched from **S8** to **S2**.
 
 This README covers the GATT Server application in detail.
 
-**LE Long Range Peripheral application (GATT Server):**
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoidC4gdW5kYXZhbGxpIiwiRG9jIHZlcnNpb24iOiIxLjAuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiQlRBQkxFIn0=)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoidC4gdW5kYXZhbGxpIiwiRG9jIHZlcnNpb24iOiIxLjEuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiQlRBQkxFIn0=)
 
 
 ## Requirements
 
 - [ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) v3.0 or later (tested with v3.0)
 - Board support package (BSP) minimum required version for:
-   - CYW920829M2EVB-01 : v4.0.0
+   - CYW920829M2EVK-02 : v1.0.0 Beta4
 - Programming language: C
 - Associated parts: All [AIROC&trade; CYW20829 Bluetooth&reg; LE SoC](https://www.infineon.com/cms/en/product/promopages/airoc20829/)
 
@@ -31,7 +38,7 @@ This README covers the GATT Server application in detail.
 
 ## Supported kits
 
-- [AIROC&trade; CYW920829M2EVB-01](https://www.infineon.com/cms/en/product/promopages/airoc20829/) (`CYW920829M2EVB-01`)
+- [AIROC&trade; CYW920829M2EVK-02](https://www.infineon.com/cms/en/product/promopages/airoc20829/) (`CYW920829M2EVK-02`)
 
 ## Hardware setup
 
@@ -86,10 +93,10 @@ Argument | Description | Required/optional
 
 <br>
 
-The following example clones the "[mtb-example-btstack-freertos-le-lr-peripheral](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)" application with the desired name "LeLrPeripheral" configured for the *CYW920829M2EVB-01* BSP into the specified working directory, *C:/mtb_projects*:
+The following example clones the "[mtb-example-btstack-freertos-le-lr-peripheral](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)" application with the desired name "LeLrPeripheral" configured for the *CYW920829M2EVK-02* BSP into the specified working directory, *C:/mtb_projects*:
 
    ```
-   project-creator-cli --board-id CYW920829M2EVB-01 --app-id mtb-example-btstack-freertos-le-lr-peripheral --user-app-name LeLrPeripheral --target-dir "C:/mtb_projects"
+   project-creator-cli --board-id CYW920829M2EVK-02 --app-id mtb-example-btstack-freertos-le-lr-peripheral --user-app-name LeLrPeripheral --target-dir "C:/mtb_projects"
    ```
 
 **Note:** The project-creator-cli tool uses the `git clone` and `make getlibs` commands to fetch the repository and import the required libraries. For details, see the "Project creator tools" section of the [ModusToolbox&trade; software user guide](https://www.infineon.com/ModusToolboxUserGuide) (locally available at *{ModusToolbox&trade; software install directory}/docs_{version}/mtb_user_guide.pdf*).
@@ -107,12 +114,12 @@ Argument | Description | Required/optional
 
 <br />
 
-Following example adds the CYW920829M2EVB-01 BSP to the already created application and makes it the active BSP for the app:
+Following example adds the CYW920829M2EVK-02 BSP to the already created application and makes it the active BSP for the app:
 
    ```
-   library-manager-cli --project "C:/mtb_projects/LeLrPeripheral" --add-bsp-name CYW920829M2EVB-01 --add-bsp-version "latest-v4.X" --add-bsp-location "local"
+   library-manager-cli --project "C:/mtb_projects/LeLrPeripheral" --add-bsp-name CYW920829M2EVK-02 --add-bsp-version "latest-v1.X" --add-bsp-location "local"
 
-   library-manager-cli --project "C:/mtb_projects/LeLrPeripheral" --set-active-bsp APP_CYW920829M2EVB-01
+   library-manager-cli --project "C:/mtb_projects/LeLrPeripheral" --set-active-bsp APP_CYW920829M2EVK-02
    ```
 
 </details>
@@ -180,12 +187,11 @@ After programming, the application starts automatically.
 
 5. Push the user button on the central board to start the connection process.
 
-6. Scan and pair from the central application.
+6. After establishing a connection, the peripheral application will initiate the transmission of notifications to the client.
 
-7. The peripheral application will start sending notifications to the Client.
+7. To switch between S2 and S8 coding schemes, press the user button on the peripheral board.
 
-8. Press the user button on the peripheral application to switch between S=2/S=8 encoding algorithms.
-
+**Note:** Changing the S2/S8 coding scheme on the peripheral board does not automatically change the coding scheme on the central board. Therefore, to ensure that both boards are using the same coding scheme, the user must press the user button on the central board to match the coding scheme for both boards.
 ## Programming a CYW20829 board (when multiple boards are connected)
 
 ### Get the board's serial number
@@ -356,11 +362,12 @@ Document title: *CE236597* – *AIROC&trade;: Bluetooth&reg; LE Long Range Perip
 Version | Description of change
 -------  | ---------------------
 1.0.0    | New code example that only supports MTB 3.0
+1.1.0    | Removed CYW920829M2EVB-01 from supported kits <br> Added support for CYW920829M2EVK-02
 
 
 ---------------------------------------------------------
 
-© Cypress Semiconductor Corporation, 2022. This document is the property of Cypress Semiconductor Corporation, an Infineon Technologies company, and its affiliates ("Cypress").  This document, including any software or firmware included or referenced in this document ("Software"), is owned by Cypress under the intellectual property laws and treaties of the United States and other countries worldwide.  Cypress reserves all rights under such laws and treaties and does not, except as specifically stated in this paragraph, grant any license under its patents, copyrights, trademarks, or other intellectual property rights.  If the Software is not accompanied by a license agreement and you do not otherwise have a written agreement with Cypress governing the use of the Software, then Cypress hereby grants you a personal, non-exclusive, nontransferable license (without the right to sublicense) (1) under its copyright rights in the Software (a) for Software provided in source code form, to modify and reproduce the Software solely for use with Cypress hardware products, only internally within your organization, and (b) to distribute the Software in binary code form externally to end users (either directly or indirectly through resellers and distributors), solely for use on Cypress hardware product units, and (2) under those claims of Cypress’s patents that are infringed by the Software (as provided by Cypress, unmodified) to make, use, distribute, and import the Software solely for use with Cypress hardware products.  Any other use, reproduction, modification, translation, or compilation of the Software is prohibited.
+© Cypress Semiconductor Corporation, 2023. This document is the property of Cypress Semiconductor Corporation, an Infineon Technologies company, and its affiliates ("Cypress").  This document, including any software or firmware included or referenced in this document ("Software"), is owned by Cypress under the intellectual property laws and treaties of the United States and other countries worldwide.  Cypress reserves all rights under such laws and treaties and does not, except as specifically stated in this paragraph, grant any license under its patents, copyrights, trademarks, or other intellectual property rights.  If the Software is not accompanied by a license agreement and you do not otherwise have a written agreement with Cypress governing the use of the Software, then Cypress hereby grants you a personal, non-exclusive, nontransferable license (without the right to sublicense) (1) under its copyright rights in the Software (a) for Software provided in source code form, to modify and reproduce the Software solely for use with Cypress hardware products, only internally within your organization, and (b) to distribute the Software in binary code form externally to end users (either directly or indirectly through resellers and distributors), solely for use on Cypress hardware product units, and (2) under those claims of Cypress’s patents that are infringed by the Software (as provided by Cypress, unmodified) to make, use, distribute, and import the Software solely for use with Cypress hardware products.  Any other use, reproduction, modification, translation, or compilation of the Software is prohibited.
 <br>
 TO THE EXTENT PERMITTED BY APPLICABLE LAW, CYPRESS MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO THIS DOCUMENT OR ANY SOFTWARE OR ACCOMPANYING HARDWARE, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  No computing device can be absolutely secure.  Therefore, despite security measures implemented in Cypress hardware or software products, Cypress shall have no liability arising out of any security breach, such as unauthorized access to or use of a Cypress product. CYPRESS DOES NOT REPRESENT, WARRANT, OR GUARANTEE THAT CYPRESS PRODUCTS, OR SYSTEMS CREATED USING CYPRESS PRODUCTS, WILL BE FREE FROM CORRUPTION, ATTACK, VIRUSES, INTERFERENCE, HACKING, DATA LOSS OR THEFT, OR OTHER SECURITY INTRUSION (collectively, "Security Breach").  Cypress disclaims any liability relating to any Security Breach, and you shall and hereby do release Cypress from any claim, damage, or other liability arising from any Security Breach.  In addition, the products described in these materials may contain design defects or errors known as errata which may cause the product to deviate from published specifications. To the extent permitted by applicable law, Cypress reserves the right to make changes to this document without further notice. Cypress does not assume any liability arising out of the application or use of any product or circuit described in this document. Any information provided in this document, including any sample design information or programming code, is provided only for reference purposes.  It is the responsibility of the user of this document to properly design, program, and test the functionality and safety of any application made of this information and any resulting product.  "High-Risk Device" means any device or system whose failure could cause personal injury, death, or property damage.  Examples of High-Risk Devices are weapons, nuclear installations, surgical implants, and other medical devices.  "Critical Component" means any component of a High-Risk Device whose failure to perform can be reasonably expected to cause, directly or indirectly, the failure of the High-Risk Device, or to affect its safety or effectiveness.  Cypress is not liable, in whole or in part, and you shall and hereby do release Cypress from any claim, damage, or other liability arising from any use of a Cypress product as a Critical Component in a High-Risk Device. You shall indemnify and hold Cypress, including its affiliates, and its directors, officers, employees, agents, distributors, and assigns harmless from and against all claims, costs, damages, and expenses, arising out of any claim, including claims for product liability, personal injury or death, or property damage arising from any use of a Cypress product as a Critical Component in a High-Risk Device. Cypress products are not intended or authorized for use as a Critical Component in any High-Risk Device except to the limited extent that (i) Cypress’s published data sheet for the product explicitly states Cypress has qualified the product for use in a specific High-Risk Device, or (ii) Cypress has given you advance written authorization to use the product as a Critical Component in the specific High-Risk Device and you have signed a separate indemnification agreement.
 <br>

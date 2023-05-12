@@ -8,7 +8,7 @@
  *
  *
  *******************************************************************************
- * Copyright 2021-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2021-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -363,13 +363,13 @@ void hci_trace_cback(wiced_bt_hci_trace_type_t type, uint16_t length, uint8_t *p
  *   This function configures adv data and starts extended adv using LE LR PHY
  *
  * Parameters:
- *   None
+ *   uint8_t coding_scheme
  *
  * Return:
  *  None
  *
  *************************************************************************************************/
-void hello_sensor_start_extended_adv(void)
+void hello_sensor_start_extended_adv(uint8_t coding_scheme)
 {
 #define AD_FLAG_SIZE 2
 #define HELLO_SENSOR_EXT_ADV_HANDLE 1
@@ -380,21 +380,25 @@ void hello_sensor_start_extended_adv(void)
     uint8_t *p_ext_adv_data = data;
     wiced_bt_dev_status_t sts;
 
-    wiced_bt_ble_set_ext_adv_parameters(HELLO_SENSOR_EXT_ADV_HANDLE,
-                                        WICED_BT_BLE_EXT_ADV_EVENT_CONNECTABLE_ADV,
-                                        40,
-                                        40,
-                                        (BTM_BLE_ADVERT_CHNL_37 | BTM_BLE_ADVERT_CHNL_38 | BTM_BLE_ADVERT_CHNL_39),
-                                        BLE_ADDR_PUBLIC,
-                                        BLE_ADDR_PUBLIC,
-                                        null_addr,
-                                        BTM_BLE_ADV_POLICY_ACCEPT_CONN_AND_SCAN,
-                                        0x7F,
-                                        WICED_BT_BLE_EXT_ADV_PHY_LE_CODED,
-                                        0,
-                                        WICED_BT_BLE_EXT_ADV_PHY_LE_CODED,
-                                        1,
-                                        WICED_BT_BLE_EXT_ADV_SCAN_REQ_NOTIFY_ENABLE);
+    wiced_bt_ble_ext_adv_params_t params;
+    params.event_properties = WICED_BT_BLE_EXT_ADV_EVENT_CONNECTABLE_ADV;
+    params.primary_adv_int_min = 40;
+    params.primary_adv_int_max = 40;
+    params.primary_adv_channel_map = (BTM_BLE_ADVERT_CHNL_37 | BTM_BLE_ADVERT_CHNL_38 | BTM_BLE_ADVERT_CHNL_39);
+    params.own_addr_type = BLE_ADDR_PUBLIC;
+    params.peer_addr_type = BLE_ADDR_PUBLIC;
+    memcpy(params.peer_addr, null_addr, BD_ADDR_LEN);
+    params.adv_filter_policy = BTM_BLE_ADV_POLICY_ACCEPT_CONN_AND_SCAN;
+    params.adv_tx_power = 0x7F;
+    params.primary_adv_phy = WICED_BT_BLE_EXT_ADV_PHY_LE_CODED;
+    params.secondary_adv_max_skip = 0;
+    params.secondary_adv_phy = WICED_BT_BLE_EXT_ADV_PHY_LE_CODED;
+    params.adv_sid = 1;
+    params.scan_request_not = WICED_BT_BLE_EXT_ADV_SCAN_REQ_NOTIFY_ENABLE;
+    params.primary_phy_opts = coding_scheme;
+    params.secondary_phy_opts = coding_scheme;
+
+    wiced_bt_ble_set_ext_adv_parameters_v2(HELLO_SENSOR_EXT_ADV_HANDLE, &params);
 
     UINT8_TO_STREAM(p_ext_adv_data, AD_FLAG_SIZE);
     UINT8_TO_STREAM(p_ext_adv_data, BTM_BLE_ADVERT_TYPE_FLAG);
@@ -441,6 +445,12 @@ static void hello_sensor_application_init(void)
 #endif
 
     printf("\nHello sensor application init\n");
+
+    /* Use a different BD address than one set in design.cybt setting to avoid conflict with same
+     * BD address in Central app design.cybt setting
+     */
+    wiced_bt_device_address_t dev_addr = {0x99, 0x88, 0x77, 0x66, 0x55, 0x44};
+    wiced_bt_set_local_bdaddr (dev_addr, BLE_ADDR_PUBLIC);
 
     configure_user_btn(user_button_interrupt_handler);
 
@@ -1346,10 +1356,10 @@ void hello_sensor_gatts_increment_notify_value(void)
     app_hello_sensor_notify[last_byte] = c;
 }
 
-#define opcode_vsc_set_s_8_ext_adv 0x01B7
+#define opcode_vsc_set_s_8_on_connection 0x01B7
 
 /*******************************************************************************
- * Function Name: set_s_8_ext_adv
+ * Function Name: set_s_8_on_connection
  ********************************************************************************
  * Summary:
  * Send Vendor Specific Command to use S=8 coded PHY for extended advertisement
@@ -1361,12 +1371,12 @@ void hello_sensor_gatts_increment_notify_value(void)
  *  wiced_bt_dev_status_t  Result from BT_RESULT_LIST
  *
  *******************************************************************************/
-wiced_bt_dev_status_t set_s_8_ext_adv(void)
+wiced_bt_dev_status_t set_s_8_on_connection(void)
 {
     wiced_bt_dev_status_t bt_status = WICED_BT_ERROR;
-    uint8_t buffer[] = {0x06, 0x04, 0x0A, 0x1E, 0x01, 0x00, 0xB5, 0x06, 0x01};
+    uint8_t buffer[] = {0x01};
 
-    bt_status = wiced_bt_dev_vendor_specific_command(opcode_vsc_set_s_8_ext_adv, sizeof(buffer), buffer, NULL);
+    bt_status = wiced_bt_dev_vendor_specific_command(opcode_vsc_set_s_8_on_connection, sizeof(buffer), buffer, NULL);
     if (bt_status != WICED_BT_PENDING)
     {
         return bt_status;
@@ -1398,26 +1408,30 @@ static void user_button_interrupt_handler(void)
         wiced_bt_ble_phy_preferences_t phy_pref = {0};
 
         memcpy(phy_pref.remote_bd_addr, hello_sensor_state.remote_addr, BD_ADDR_LEN);
-        phy_pref.phy_opts = (hello_sensor_state.is_s8_coding_active) ? BTM_BLE_PREFER_LELR_125K : BTM_BLE_PREFER_LELR_512K;
+        phy_pref.phy_opts = (hello_sensor_state.is_s8_coding_active) ? BTM_BLE_PREFER_LELR_S2 : BTM_BLE_PREFER_LELR_S8;
         phy_pref.tx_phys = BTM_BLE_PREFER_LELR_PHY;
         phy_pref.rx_phys = BTM_BLE_PREFER_LELR_PHY;
 
         wiced_bt_ble_set_phy(&phy_pref);
 
-        printf("Switching for LE LR PHY coding [is_s8_coding_active : %d] \n",
-               hello_sensor_state.is_s8_coding_active);
         hello_sensor_state.is_s8_coding_active ^= 1;
+        printf("Switching LE LR PHY coding [is_s8_coding_active : %d] \n",
+               hello_sensor_state.is_s8_coding_active);
+
     }
     else
     {
         printf("Starting Adv\n");
 
-#ifdef USE_S_8_FOR_ADV
-        set_s_8_ext_adv();
-#endif
-
+#ifdef USE_S8_DEFAULT
+        set_s_8_on_connection();
         /* Set the advertising params and make the device discoverable */
-        hello_sensor_start_extended_adv();
+        hello_sensor_start_extended_adv(WICED_BT_BLE_PHY_ADV_OPTIONS_REQUIRE_S8);
+        hello_sensor_state.is_s8_coding_active = 1;
+#else
+        hello_sensor_start_extended_adv(WICED_BT_BLE_PHY_ADV_OPTIONS_REQUIRE_S2);
+        hello_sensor_state.is_s8_coding_active = 0;
+#endif
     }
 }
 
