@@ -19,14 +19,14 @@ This README covers the GATT Server application in detail.
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoidC4gdW5kYXZhbGxpIiwiRG9jIHZlcnNpb24iOiIxLjEuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiQlRBQkxFIn0=)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoidC4gdW5kYXZhbGxpIiwiRG9jIHZlcnNpb24iOiIxLjIuMCIsIkRvYyBMYW5ndWFnZSI6IkVuZ2xpc2giLCJEb2MgRGl2aXNpb24iOiJNQ0QiLCJEb2MgQlUiOiJJQ1ciLCJEb2MgRmFtaWx5IjoiQlRBQkxFIn0=)
 
 
 ## Requirements
 
 - [ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) v3.0 or later (tested with v3.0)
 - Board support package (BSP) minimum required version for:
-   - CYW920829M2EVK-02 : v1.0.0 Beta4
+   - CYW920829M2EVK-02 : v1.0.1
 - Programming language: C
 - Associated parts: All [AIROC&trade; CYW20829 Bluetooth&reg; LE SoC](https://www.infineon.com/cms/en/product/promopages/airoc20829/)
 
@@ -363,6 +363,7 @@ Version | Description of change
 -------  | ---------------------
 1.0.0    | New code example that only supports MTB 3.0
 1.1.0    | Removed CYW920829M2EVB-01 from supported kits <br> Added support for CYW920829M2EVK-02
+1.2.0    | Update README to reflect minimum BSP support for CYW920829M2EVK-02 : v1.0.1
 
 
 ---------------------------------------------------------
