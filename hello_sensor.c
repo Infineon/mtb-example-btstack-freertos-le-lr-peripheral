@@ -60,7 +60,7 @@
 #include "cy_retarget_io.h"
 #include "cyhal.h"
 #include "cybt_platform_trace.h"
-#include "cybt_debug_uart.h"
+
 
 #include "GeneratedSource/cycfg_gatt_db.h"
 #include "GeneratedSource/cycfg_bt_settings.h"
