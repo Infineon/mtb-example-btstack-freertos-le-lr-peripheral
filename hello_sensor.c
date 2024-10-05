@@ -71,6 +71,9 @@
 #include "app_bt_bonding.h"
 #include "app_serial_flash.h"
 #include "user_btn.h"
+#ifdef ENABLE_BT_SPY_LOG
+#include "cybt_debug_uart.h"
+#endif
 
 /*******************************************************************************
  * Macros

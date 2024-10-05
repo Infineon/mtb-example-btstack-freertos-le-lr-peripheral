@@ -67,7 +67,9 @@
 #include "mtb_kvstore.h"
 #include "cybt_platform_config.h"
 #include "cybsp_bt_config.h"
-
+#ifdef ENABLE_BT_SPY_LOG
+#include "cybt_debug_uart.h"
+#endif
 
 /*******************************************************************************
 *        Macro Definitions

@@ -19,7 +19,7 @@ This README covers the GATT Server application in detail.
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNyYSIsIkRvYyB2ZXJzaW9uIjoiMi4wLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IkJUQUJMRSJ9)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNyYSIsIkRvYyB2ZXJzaW9uIjoiMi4wLjEiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IkJUQUJMRSJ9)
 
 
 ## Requirements
@@ -283,7 +283,8 @@ BTSpy is a trace utility that can be used in the AIROC&trade; Bluetooth&reg; pla
 
 Do the following to configure the use of BTSpy:
 
-1. Add the `ENABLE_BT_SPY_LOG` macro in the Makefile or command-line `DEFINES+=ENABLE_BT_SPY_LOG`.
+1. Add airoc-hci-transport from library manager before enabling spy traces, check airoc-hci-transport [README.md](https://github.com/Infineon/airoc-hci-transport/blob/master/README.md) for more details. If airoc-hci-transport library is included in the   application, it is recommended to initialize it (Call cybt_debug_uart_init()). If airoc-hci-transport library is present in the application, but you want to use retarget-io library to get application traces in Teraterm/putty, you need to set the ENABLE_AIROC_HCI_TRANSPORT_PRINTF MACRO value to 0 in the application. Otherwise printf messages of the application will not be visible.
+ #define ENABLE_AIROC_HCI_TRANSPORT_PRINTF 1 . Add the `ENABLE_BT_SPY_LOG` macro in the Makefile or command-line `DEFINES+=ENABLE_BT_SPY_LOG`.
 
 2. Call `cybt_debug_uart_init(&debug_uart_configuration, NULL);`
 
@@ -400,6 +401,7 @@ Version | Description of change
 1.2.0    | Update README to reflect minimum BSP support for CYW920829M2EVK-02 : v1.0.1
 1.3.0    | Added support for CYW989829M2EVB-01
 2.0.0    | Added support for CYW989829M2EVB-03 ,BSP and BTStack-integration major update for BT Firmware as a separate asset
+2.0.1    | Added header file
 
 All referenced product or service names and trademarks are the property of their respective owners.
 
