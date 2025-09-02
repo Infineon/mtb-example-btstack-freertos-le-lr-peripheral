@@ -19,16 +19,15 @@ This README covers the GATT Server application in detail.
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNyYSIsIkRvYyB2ZXJzaW9uIjoiMi4wLjEiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IkJUQUJMRSJ9)
+[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNyYSIsIkRvYyB2ZXJzaW9uIjoiMi4xLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IkJUQUJMRSJ9)
 
 
 ## Requirements
 
 - [ModusToolbox&trade; software](https://www.infineon.com/modustoolbox) v3.2 or later (tested with v3.2)
 - Board support package (BSP) minimum required version for:
-   - CYW920829M2EVK-02 : v2.0.0
-   - CYW989829M2EVB-01: v2.0.0
-   - CYW989829M2EVB-03: v2.0.0
+   - CYW920829M2EVK-02 : v3.0.0
+   - CYW989829M2EVB-01: v3.0.0
 - Programming language: C
 - Associated parts: All [AIROC&trade; CYW20829 Bluetooth&reg; LE SoC](https://www.infineon.com/cms/en/product/promopages/airoc20829/)
 
@@ -41,7 +40,7 @@ This README covers the GATT Server application in detail.
 ## Supported kits
 
 - [AIROC&trade; CYW920829M2EVK-02](https://www.infineon.com/cms/en/product/promopages/airoc20829/) (`CYW920829M2EVK-02`)
-- [AIROC&trade; CYW89829 Bluetooth&reg; LE Evaluation Kit]() (`CYW989829M2EVB-01`,`CYW989829M2EVB-03`)
+- [AIROC&trade; CYW89829 Bluetooth&reg; LE Evaluation Kit]() (`CYW989829M2EVB-01`)
 
 ## Hardware setup
 
@@ -402,6 +401,7 @@ Version | Description of change
 1.3.0    | Added support for CYW989829M2EVB-01
 2.0.0    | Added support for CYW989829M2EVB-03 ,BSP and BTStack-integration major update for BT Firmware as a separate asset
 2.0.1    | Added header file
+2.1.0    | Remove support for CYW989829M2EVB-03
 
 All referenced product or service names and trademarks are the property of their respective owners.
 
