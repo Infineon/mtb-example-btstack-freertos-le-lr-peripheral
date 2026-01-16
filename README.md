@@ -19,7 +19,7 @@ This README covers the GATT Server application in detail.
 
 [View this README on GitHub.](https://github.com/Infineon/mtb-example-btstack-freertos-le-lr-peripheral)
 
-[Provide feedback on this code example.](https://cypress.co1.qualtrics.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNyYSIsIkRvYyB2ZXJzaW9uIjoiMi4xLjAiLCJEb2MgTGFuZ3VhZ2UiOiJFbmdsaXNoIiwiRG9jIERpdmlzaW9uIjoiTUNEIiwiRG9jIEJVIjoiSUNXIiwiRG9jIEZhbWlseSI6IkJUQUJMRSJ9)
+[Provide feedback on this code example.](https://yourvoice.infineon.com/jfe/form/SV_1NTns53sK2yiljn?Q_EED=eyJVbmlxdWUgRG9jIElkIjoiQ0UyMzY1OTciLCJTcGVjIE51bWJlciI6IjAwMi0zNjU5NyIsIkRvYyBUaXRsZSI6IkFJUk9DJnRyYWRlOzogQmx1ZXRvb3RoJnJlZzsgTEUgTG9uZyBSYW5nZSBQZXJpcGhlcmFsIiwicmlkIjoiYXNob2suckBpbmZpbmVvbi5jb20iLCJEb2MgdmVyc2lvbiI6IjMuMC4wIiwiRG9jIExhbmd1YWdlIjoiRW5nbGlzaCIsIkRvYyBEaXZpc2lvbiI6Ik1DRCIsIkRvYyBCVSI6IklDVyIsIkRvYyBGYW1pbHkiOiJCVEFCTEUifQ==)
 
 
 ## Requirements
@@ -402,6 +402,7 @@ Version | Description of change
 2.0.0    | Added support for CYW989829M2EVB-03 ,BSP and BTStack-integration major update for BT Firmware as a separate asset
 2.0.1    | Added header file
 2.1.0    | Remove support for CYW989829M2EVB-03
+3.0.0    | Update Code Example with BTSTACK 5.0.0
 
 All referenced product or service names and trademarks are the property of their respective owners.
 

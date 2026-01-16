@@ -8,36 +8,33 @@
  *
  *
  *******************************************************************************
- * Copyright 2021-2025, Cypress Semiconductor Corporation (an Infineon company) or
- * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
+ * (c) 2021-2026, Infineon Technologies AG, or an affiliate of Infineon
+ * Technologies AG. All rights reserved.
+ * This software, associated documentation and materials ("Software") is
+ * owned by Infineon Technologies AG or one of its affiliates ("Infineon")
+ * and is protected by and subject to worldwide patent protection, worldwide
+ * copyright laws, and international treaty provisions. Therefore, you may use
+ * this Software only as provided in the license agreement accompanying the
+ * software package from which you obtained this Software. If no license
+ * agreement applies, then any use, reproduction, modification, translation, or
+ * compilation of this Software is prohibited without the express written
+ * permission of Infineon.
  *
- * This software, including source code, documentation and related
- * materials ("Software") is owned by Cypress Semiconductor Corporation
- * or one of its affiliates ("Cypress") and is protected by and subject to
- * worldwide patent protection (United States and foreign),
- * United States copyright laws and international treaty provisions.
- * Therefore, you may use this Software only as provided in the license
- * agreement accompanying the software package from which you
- * obtained this Software ("EULA").
- * If no EULA applies, Cypress hereby grants you a personal, non-exclusive,
- * non-transferable license to copy, modify, and compile the Software
- * source code solely for use in connection with Cypress's
- * integrated circuit products.  Any reproduction, modification, translation,
- * compilation, or representation of this Software except as specified
- * above is prohibited without the express written permission of Cypress.
- *
- * Disclaimer: THIS SOFTWARE IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, NONINFRINGEMENT, IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. Cypress
- * reserves the right to make changes to the Software without notice. Cypress
- * does not assume any liability arising out of the application or use of the
- * Software or any product or circuit described in the Software. Cypress does
- * not authorize its products for use in any products where a malfunction or
- * failure of the Cypress product may reasonably be expected to result in
- * significant property damage, injury or death ("High Risk Product"). By
- * including Cypress's product in a High Risk Product, the manufacturer
- * of such system or application assumes all risk of such use and in doing
- * so agrees to indemnify Cypress against all liability.
+ * Disclaimer: UNLESS OTHERWISE EXPRESSLY AGREED WITH INFINEON, THIS SOFTWARE
+ * IS PROVIDED AS-IS, WITH NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING, BUT NOT LIMITED TO, ALL WARRANTIES OF NON-INFRINGEMENT OF
+ * THIRD-PARTY RIGHTS AND IMPLIED WARRANTIES SUCH AS WARRANTIES OF FITNESS FOR A
+ * SPECIFIC USE/PURPOSE OR MERCHANTABILITY.
+ * Infineon reserves the right to make changes to the Software without notice.
+ * You are responsible for properly designing, programming, and testing the
+ * functionality and safety of your intended application of the Software, as
+ * well as complying with any legal requirements related to its use. Infineon
+ * does not guarantee that the Software will be free from intrusion, data theft
+ * or loss, or other breaches ("Security Breaches"), and Infineon shall have
+ * no liability arising out of any Security Breaches. Unless otherwise
+ * explicitly approved by Infineon, the Software may not be used in any
+ * application where a failure of the Product or any consequences of the use
+ * thereof can reasonably be expected to result in personal injury.
  *******************************************************************************/
 
 /*******************************************************************************
@@ -123,7 +120,7 @@ host_info_t hello_sensor_hostinfo;
    timer is used to measure the duration of button press events */
 TimerHandle_t hello_sensor_second_timer, hello_sensor_ms_timer;
 
-wiced_bt_ble_ext_adv_duration_config_t duration_cfg;
+wiced_ble_ext_adv_duration_config_t duration_cfg;
 
 typedef void (*pfn_free_buffer_t)(uint8_t *);
 
@@ -383,25 +380,25 @@ void hello_sensor_start_extended_adv(uint8_t coding_scheme)
     uint8_t *p_ext_adv_data = data;
     wiced_bt_dev_status_t sts;
 
-    wiced_bt_ble_ext_adv_params_t params;
-    params.event_properties = WICED_BT_BLE_EXT_ADV_EVENT_CONNECTABLE_ADV;
+    wiced_ble_ext_adv_params_t params;
+    params.event_properties = WICED_BLE_EXT_ADV_EVENT_PROPERTY_CONNECTABLE_ADV;
     params.primary_adv_int_min = 40;
     params.primary_adv_int_max = 40;
     params.primary_adv_channel_map = (BTM_BLE_ADVERT_CHNL_37 | BTM_BLE_ADVERT_CHNL_38 | BTM_BLE_ADVERT_CHNL_39);
-    params.own_addr_type = BLE_ADDR_PUBLIC;
+    params.own_addr_type = WICED_BLE_OWN_ADDR_PUBLIC;
     params.peer_addr_type = BLE_ADDR_PUBLIC;
     memcpy(params.peer_addr, null_addr, BD_ADDR_LEN);
     params.adv_filter_policy = BTM_BLE_ADV_POLICY_ACCEPT_CONN_AND_SCAN;
     params.adv_tx_power = 0x7F;
-    params.primary_adv_phy = WICED_BT_BLE_EXT_ADV_PHY_LE_CODED;
+    params.primary_adv_phy = WICED_BLE_EXT_ADV_PHY_LE_CODED;
     params.secondary_adv_max_skip = 0;
-    params.secondary_adv_phy = WICED_BT_BLE_EXT_ADV_PHY_LE_CODED;
+    params.secondary_adv_phy = WICED_BLE_EXT_ADV_PHY_LE_CODED;
     params.adv_sid = 1;
-    params.scan_request_not = WICED_BT_BLE_EXT_ADV_SCAN_REQ_NOTIFY_ENABLE;
+    params.scan_request_not = WICED_BLE_EXT_ADV_SCAN_REQ_NOTIFY_ENABLE;
     params.primary_phy_opts = coding_scheme;
     params.secondary_phy_opts = coding_scheme;
 
-    wiced_bt_ble_set_ext_adv_parameters_v2(HELLO_SENSOR_EXT_ADV_HANDLE, &params);
+    wiced_ble_ext_adv_set_params(HELLO_SENSOR_EXT_ADV_HANDLE, &params);
 
     UINT8_TO_STREAM(p_ext_adv_data, AD_FLAG_SIZE);
     UINT8_TO_STREAM(p_ext_adv_data, BTM_BLE_ADVERT_TYPE_FLAG);
@@ -412,7 +409,7 @@ void hello_sensor_start_extended_adv(uint8_t coding_scheme)
     ARRAY_TO_STREAM(p_ext_adv_data, hello_service_uuid, LEN_UUID_128);
 
     // Set adv data in LTV format
-    sts = wiced_bt_ble_set_ext_adv_data(HELLO_SENSOR_EXT_ADV_HANDLE, (p_ext_adv_data - data), data);
+    sts = wiced_ble_ext_adv_set_adv_data(HELLO_SENSOR_EXT_ADV_HANDLE, (p_ext_adv_data - data), data);
     printf("[%s] sts %d [adv size %d]\n", __FUNCTION__, sts, (p_ext_adv_data - data));
 
     duration_cfg.adv_handle = HELLO_SENSOR_EXT_ADV_HANDLE;
@@ -420,7 +417,7 @@ void hello_sensor_start_extended_adv(uint8_t coding_scheme)
     duration_cfg.max_ext_adv_events = 0;
 
     // Start adv
-    wiced_bt_ble_start_ext_adv(1, 1, &duration_cfg);
+    wiced_ble_ext_adv_enable(1, 1, &duration_cfg);
 }
 
 /**************************************************************************************************
@@ -518,7 +515,7 @@ void hello_sensor_adv_stop_handler(void)
     if (hello_sensor_state.flag_stay_connected && !hello_sensor_state.conn_id)
     {
         // result =  wiced_bt_start_advertisements( BTM_BLE_ADVERT_UNDIRECTED_HIGH, 0, NULL );
-        result = wiced_bt_ble_start_ext_adv(1, 1, &duration_cfg);
+        result = wiced_ble_ext_adv_enable(1, 1, &duration_cfg);
         if (result != WICED_BT_SUCCESS)
             printf("Advertisement start failed :%d\n", result);
     }
@@ -968,7 +965,7 @@ static wiced_bt_gatt_status_t hello_sensor_gatts_connection_down(wiced_bt_gatt_c
      */
     if (hello_sensor_state.flag_stay_connected)
     {
-        result = wiced_bt_ble_start_ext_adv(1, 1, &duration_cfg);
+        result = wiced_ble_ext_adv_enable(1, 1, &duration_cfg);
         if (result != WICED_BT_SUCCESS)
             printf("Start advertisement failed: %d\n", result);
     }
@@ -1429,10 +1426,10 @@ static void user_button_interrupt_handler(void)
 #ifdef USE_S8_DEFAULT
         set_s_8_on_connection();
         /* Set the advertising params and make the device discoverable */
-        hello_sensor_start_extended_adv(WICED_BT_BLE_PHY_ADV_OPTIONS_REQUIRE_S8);
+        hello_sensor_start_extended_adv(WICED_BLE_EXT_ADV_PHY_OPTIONS_PREFER_S8);
         hello_sensor_state.is_s8_coding_active = 1;
 #else
-        hello_sensor_start_extended_adv(WICED_BT_BLE_PHY_ADV_OPTIONS_REQUIRE_S2);
+        hello_sensor_start_extended_adv(WICED_BLE_EXT_ADV_PHY_OPTIONS_PREFER_S2);
         hello_sensor_state.is_s8_coding_active = 0;
 #endif
     }
